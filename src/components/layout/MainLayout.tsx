@@ -22,7 +22,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <Header toggleSidebar={toggleSidebar} />
       
       <div className="flex flex-1">
-        <Sidebar isOpen={sidebarOpen} onCloseSidebar={() => setSidebarOpen(false)} />
+        {/* Remove the props that are causing the error */}
+        <Sidebar />
         
         <main className={cn(
           "flex-1 transition-all duration-200",

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Power, LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { IconSelector } from './IconSelector';
+import IconSelector from './IconSelector';
 import * as icons from 'lucide-react';
 
 interface CustomIconButtonProps {
