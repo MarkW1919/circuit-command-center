@@ -10,6 +10,7 @@ import Faults from "./pages/Faults";
 import Setup from "./pages/Setup";
 import Settings from "./pages/Settings";
 import CustomizePage from "./pages/CustomizePage";
+import ButtonCustomizePage from "./pages/ButtonCustomizePage";
 import Diagnostics from "./pages/Diagnostics";
 import NotFound from "./pages/NotFound";
 import { AppProvider } from "./contexts/app";
@@ -33,6 +34,7 @@ const App = () => (
               <Route path="/setup" element={<Setup />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/customize" element={<CustomizePage />} />
+              <Route path="/buttons" element={<ButtonCustomizePage />} />
               <Route path="/diagnostics" element={<Diagnostics />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
