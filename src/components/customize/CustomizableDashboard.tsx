@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
+
+import React, { useState, useRef } from 'react';
+import { useDrop } from 'react-dnd';
 import { useCustomize, WidgetPosition } from '@/contexts/CustomizeContext';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -9,9 +10,49 @@ import { toast } from '@/components/ui/use-toast';
 import { useApp } from '@/contexts/app';
 
 const CustomizableDashboard = () => {
-  const { widgets, addWidget } = useCustomize();
+  const { widgets, addWidget, moveWidget } = useCustomize();
   const { switches } = useApp();
   const [selectedType, setSelectedType] = useState<'switch' | 'meter' | 'status' | 'chart'>('switch');
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  // Calculate grid position from mouse coordinates
+  const getGridPosition = (x: number, y: number) => {
+    if (!gridRef.current) return { gridX: 0, gridY: 0 };
+    
+    const rect = gridRef.current.getBoundingClientRect();
+    const gridWidth = rect.width;
+    const gridHeight = rect.height;
+    
+    // Calculate grid position (12x12 grid)
+    const gridX = Math.floor((12 * (x - rect.left)) / gridWidth);
+    const gridY = Math.floor((12 * (y - rect.top)) / gridHeight);
+    
+    // Clamp values to grid boundaries
+    return {
+      gridX: Math.max(0, Math.min(gridX, 11)),
+      gridY: Math.max(0, Math.min(gridY, 11))
+    };
+  };
+
+  // Set up drop target
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: 'WIDGET',
+    drop: (item: { id: string }, monitor) => {
+      const { gridX, gridY } = getGridPosition(
+        monitor.getClientOffset()?.x || 0,
+        monitor.getClientOffset()?.y || 0
+      );
+      moveWidget(item.id, gridX, gridY);
+      
+      toast({
+        title: "Widget moved",
+        description: `Widget has been moved to position (${gridX}, ${gridY})`,
+      });
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }));
 
   // Handle adding a new widget
   const handleAddWidget = () => {
@@ -56,8 +97,14 @@ const CustomizableDashboard = () => {
         </Button>
       </div>
 
-      <div className="bg-gray-900 border border-gray-800 rounded-lg h-[600px] relative p-4 overflow-hidden">
-        <div className="grid grid-cols-12 h-full gap-2 bg-opacity-50 bg-gray-800/20">
+      <div 
+        className="bg-gray-900 border border-gray-800 rounded-lg h-[600px] relative p-4 overflow-hidden"
+        ref={node => {
+          gridRef.current = node;
+          drop(node);
+        }}
+      >
+        <div className={`grid grid-cols-12 h-full gap-2 bg-opacity-50 bg-gray-800/20 ${isOver ? 'border-2 border-dashed border-blue-500' : ''}`}>
           {widgets.map((widget) => (
             <DraggableWidget key={widget.id} widget={widget} />
           ))}
