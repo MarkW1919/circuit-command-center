@@ -2,7 +2,7 @@
 import React, { useRef, useState } from 'react';
 import { useDrag } from 'react-dnd';
 import { useCustomize, WidgetPosition } from '@/contexts/CustomizeContext';
-import { X, GripVertical, ArrowsOutCardinal } from 'lucide-react';
+import { X, GripVertical, ArrowsUpFromLine } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import CustomSwitch from './widgets/CustomSwitch';
 import CustomMeter from './widgets/CustomMeter';
@@ -134,7 +134,7 @@ const DraggableWidget = ({ widget }: DraggableWidgetProps) => {
         className="absolute bottom-1 right-1 w-4 h-4 cursor-se-resize" 
         onMouseDown={(e) => handleResize(e, 'corner')}
       >
-        <ArrowsOutCardinal size={14} className="text-gray-400" />
+        <ArrowsUpFromLine size={14} className="text-gray-400 rotate-180" />
       </div>
       
       <div 
