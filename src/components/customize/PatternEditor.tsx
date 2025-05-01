@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useCustomize, PatternBank } from '@/contexts/CustomizeContext';
-import { useApp } from '@/contexts/AppContext';
+import { useApp } from '@/contexts/app';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

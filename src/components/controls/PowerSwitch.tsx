@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useApp } from '@/contexts/AppContext';
+import { useApp } from '@/contexts/app';
 import { SwitchStatus } from '@/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, Zap, AirVent, AlarmClock, BatteryCharging, Bell, Fan, Lightbulb, Plug, Power } from 'lucide-react';
