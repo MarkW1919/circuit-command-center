@@ -3,7 +3,8 @@ import React from 'react';
 import { WidgetPosition } from '@/contexts/CustomizeContext';
 import { useApp } from '@/contexts/app';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { cn } from '@/lib/utils';
 
 interface CustomChartProps {
   widget: WidgetPosition;
@@ -19,7 +20,15 @@ const CustomChart = ({ widget }: CustomChartProps) => {
   const data = activeSwitches.map(sw => ({
     name: sw.name,
     value: sw.current,
+    id: sw.id
   }));
+  
+  // Custom colors based on current draw
+  const getBarColor = (value: number) => {
+    if (value >= 10) return '#ef4444'; // High current (red)
+    if (value >= 5) return '#f59e0b';  // Medium current (amber)
+    return '#22c55e'; // Normal current (green)
+  };
   
   return (
     <div className="space-y-4 h-full">
@@ -38,18 +47,27 @@ const CustomChart = ({ widget }: CustomChartProps) => {
         </SelectContent>
       </Select>
       
-      <div className="h-40 mt-2">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data}>
-            <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-            <YAxis tick={{ fontSize: 10 }} />
-            <Tooltip />
-            <Bar dataKey="value" fill="#3b82f6" />
-          </BarChart>
-        </ResponsiveContainer>
-        
-        {data.length === 0 && (
-          <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+      <div className={cn("h-40 mt-2 relative", data.length === 0 && "flex items-center justify-center")}>
+        {data.length > 0 ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data}>
+              <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+              <YAxis tick={{ fontSize: 10 }} />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#1a1a1a', borderColor: '#333', borderRadius: '8px' }}
+                labelStyle={{ color: '#fff' }}
+                itemStyle={{ color: '#22c55e' }}
+                formatter={(value: number) => [`${value}A`, 'Current']}
+              />
+              <Bar dataKey="value" className="animate-pulse">
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={getBarColor(entry.value)} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="text-gray-400">
             <p>No active switches</p>
           </div>
         )}

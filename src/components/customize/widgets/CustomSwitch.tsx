@@ -5,6 +5,8 @@ import { useApp } from '@/contexts/app';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
+import { Zap } from 'lucide-react';
 
 interface CustomSwitchProps {
   widget: WidgetPosition;
@@ -41,13 +43,27 @@ const CustomSwitch = ({ widget }: CustomSwitchProps) => {
       {/* Switch control */}
       {selectedSwitch && (
         <div className="flex items-center justify-between">
-          <Label htmlFor={`switch-${widget.id}`}>{selectedSwitch.name}</Label>
-          <Switch
-            id={`switch-${widget.id}`}
-            checked={selectedSwitch.active}
-            onCheckedChange={() => toggleSwitch(selectedSwitch.id)}
-            disabled={selectedSwitch.disabled || selectedSwitch.fault}
-          />
+          <div className="flex flex-col">
+            <Label htmlFor={`switch-${widget.id}`} className="mb-1">{selectedSwitch.name}</Label>
+            {selectedSwitch.active && (
+              <div className="flex items-center gap-1 text-status-active animate-pulse">
+                <Zap className="h-3 w-3" />
+                <span className="text-xs font-medium">{selectedSwitch.current}A</span>
+              </div>
+            )}
+          </div>
+          <div className={cn(
+            "relative",
+            selectedSwitch.active && "after:absolute after:inset-0 after:rounded-full after:bg-status-active/20 after:animate-ping after:animation-delay-300"
+          )}>
+            <Switch
+              id={`switch-${widget.id}`}
+              checked={selectedSwitch.active}
+              onCheckedChange={() => toggleSwitch(selectedSwitch.id)}
+              disabled={selectedSwitch.disabled || selectedSwitch.fault}
+              className={selectedSwitch.active ? "bg-status-active" : ""}
+            />
+          </div>
         </div>
       )}
     </div>

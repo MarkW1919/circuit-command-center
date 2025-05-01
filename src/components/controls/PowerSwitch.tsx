@@ -36,12 +36,31 @@ const PowerSwitch = ({ switchData }: PowerSwitchProps) => {
     return equipmentIcons[iconType] || equipmentIcons['default'];
   };
   
+  // Determine current intensity for visual cues
+  const getCurrentIntensity = () => {
+    if (switchData.current >= 10) return "high";
+    if (switchData.current >= 5) return "medium";
+    return "normal";
+  };
+  
+  const currentIntensity = getCurrentIntensity();
+  
   return (
     <Card className={cn(
-      "transition-all duration-200 overflow-hidden border-2 bg-transparent",
+      "transition-all duration-200 overflow-hidden border-2 bg-transparent relative",
       switchData.active && !switchData.fault ? "border-status-active/20" : "border-transparent",
       switchData.fault ? "border-status-danger/20" : ""
     )}>
+      {/* Active glow effect */}
+      {switchData.active && !switchData.fault && (
+        <div className={cn(
+          "absolute inset-0 bg-gradient-to-br opacity-10 animate-pulse-slow pointer-events-none",
+          currentIntensity === "high" ? "from-red-400 to-red-600" :
+          currentIntensity === "medium" ? "from-amber-400 to-amber-600" :
+          "from-cyan-400 to-cyan-600"
+        )}></div>
+      )}
+      
       <CardHeader className="p-4 pb-2">
         <CardTitle className="flex items-center justify-between">
           <span className="text-lg font-medium">{switchData.name}</span>
@@ -79,19 +98,39 @@ const PowerSwitch = ({ switchData }: PowerSwitchProps) => {
             )}>
               <div className={cn(
                 "h-10 w-10 transition-all duration-300",
-                switchData.active ? "text-cyan-400" : "text-cyan-600"
+                switchData.active && currentIntensity === "high" ? "text-red-500 animate-pulse" :
+                switchData.active && currentIntensity === "medium" ? "text-amber-500 animate-pulse" :
+                switchData.active ? "text-cyan-400 animate-pulse" : "text-cyan-600"
               )}>
                 {getSwitchIcon()}
               </div>
             </div>
           </div>
+          
+          {/* Pulse ring for active switches */}
+          {switchData.active && !switchData.fault && (
+            <div className={cn(
+              "absolute -inset-4 rounded-full border-2 opacity-0",
+              currentIntensity === "high" ? "border-red-500 animate-ping" :
+              currentIntensity === "medium" ? "border-amber-500 animate-ping" :
+              "border-cyan-400 animate-ping"
+            )}></div>
+          )}
         </button>
       </CardContent>
       <CardFooter className="p-4 pt-0 justify-between items-center text-sm">
         <span className="text-muted-foreground">CH {switchData.channel}</span>
         {switchData.active && (
-          <div className="flex items-center gap-1 text-status-active">
-            <Zap className="h-3 w-3" />
+          <div className={cn(
+            "flex items-center gap-1",
+            currentIntensity === "high" ? "text-status-danger font-bold" :
+            currentIntensity === "medium" ? "text-status-warning font-semibold" :
+            "text-status-active"
+          )}>
+            <Zap className={cn(
+              "h-3 w-3", 
+              currentIntensity === "high" && "animate-pulse"
+            )} />
             <span>{switchData.current}A</span>
           </div>
         )}
