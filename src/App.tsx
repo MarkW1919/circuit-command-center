@@ -9,8 +9,10 @@ import Controls from "./pages/Controls";
 import Faults from "./pages/Faults";
 import Setup from "./pages/Setup";
 import Settings from "./pages/Settings";
+import CustomizePage from "./pages/CustomizePage";
 import NotFound from "./pages/NotFound";
 import { AppProvider } from "./contexts/AppContext";
+import { CustomizeProvider } from "./contexts/CustomizeContext";
 import React from "react";
 
 const queryClient = new QueryClient();
@@ -18,20 +20,23 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AppProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/controls" element={<Controls />} />
-            <Route path="/faults" element={<Faults />} />
-            <Route path="/setup" element={<Setup />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <CustomizeProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/controls" element={<Controls />} />
+              <Route path="/faults" element={<Faults />} />
+              <Route path="/setup" element={<Setup />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/customize" element={<CustomizePage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </CustomizeProvider>
     </AppProvider>
   </QueryClientProvider>
 );
