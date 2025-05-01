@@ -3,6 +3,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { useApp } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   Power, 
   LayoutDashboard, 
@@ -21,15 +22,15 @@ interface SidebarProps {
 
 const Sidebar = ({ isOpen, onCloseSidebar }: SidebarProps) => {
   const { systemStatus, connectBluetooth, disconnectBluetooth, isConnecting } = useApp();
-  const activeView = "dashboard"; // TODO: Implement view switching
+  const location = useLocation();
   
   const navItems = [
-    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "control", label: "Controls", icon: Sliders },
-    { id: "faults", label: "Faults", icon: AlertCircle, 
+    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, path: "/" },
+    { id: "control", label: "Controls", icon: Sliders, path: "/controls" },
+    { id: "faults", label: "Faults", icon: AlertCircle, path: "/faults", 
       badge: systemStatus.faults.filter(f => !f.resolved).length },
-    { id: "setup", label: "Setup", icon: SlidersHorizontal },
-    { id: "settings", label: "Settings", icon: Settings }
+    { id: "setup", label: "Setup", icon: SlidersHorizontal, path: "/setup" },
+    { id: "settings", label: "Settings", icon: Settings, path: "/settings" }
   ];
   
   return (
@@ -67,16 +68,20 @@ const Sidebar = ({ isOpen, onCloseSidebar }: SidebarProps) => {
                     variant="ghost"
                     className={cn(
                       "w-full justify-start text-sidebar-foreground/70",
-                      activeView === item.id && "bg-sidebar-accent text-sidebar-foreground"
+                      location.pathname === item.path && "bg-sidebar-accent text-sidebar-foreground"
                     )}
+                    asChild
+                    onClick={onCloseSidebar}
                   >
-                    <item.icon className="mr-2 h-5 w-5" />
-                    <span>{item.label}</span>
-                    {item.badge ? (
-                      <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-status-danger text-xs text-white">
-                        {item.badge}
-                      </span>
-                    ) : null}
+                    <Link to={item.path}>
+                      <item.icon className="mr-2 h-5 w-5" />
+                      <span>{item.label}</span>
+                      {item.badge ? (
+                        <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-status-danger text-xs text-white">
+                          {item.badge}
+                        </span>
+                      ) : null}
+                    </Link>
                   </Button>
                 </li>
               ))}
