@@ -1,7 +1,7 @@
 
 import React from 'react';
 import MainLayout from '@/components/layout/MainLayout';
-import { useApp } from '@/contexts/AppContext';
+import { useApp } from '@/contexts/app';
 import PowerSwitch from '@/components/controls/PowerSwitch';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

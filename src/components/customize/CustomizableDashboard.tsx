@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { useCustomize, WidgetPosition } from '@/contexts/CustomizeContext';
@@ -7,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Plus, Move } from 'lucide-react';
 import DraggableWidget from './DraggableWidget';
 import { toast } from '@/components/ui/use-toast';
-import { useApp } from '@/contexts/AppContext';
+import { useApp } from '@/contexts/app';
 
 const CustomizableDashboard = () => {
   const { widgets, addWidget } = useCustomize();

@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { WidgetPosition } from '@/contexts/CustomizeContext';
-import { useApp } from '@/contexts/AppContext';
+import { useApp } from '@/contexts/app';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
 

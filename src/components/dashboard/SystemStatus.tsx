@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { useApp } from '@/contexts/AppContext';
+import { useApp } from '@/contexts/app';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { WidgetPosition } from '@/contexts/CustomizeContext';
-import { useApp } from '@/contexts/AppContext';
+import { useApp } from '@/contexts/app';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { AlertCircle, CheckCircle } from 'lucide-react';

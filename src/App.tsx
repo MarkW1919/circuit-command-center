@@ -11,7 +11,7 @@ import Setup from "./pages/Setup";
 import Settings from "./pages/Settings";
 import CustomizePage from "./pages/CustomizePage";
 import NotFound from "./pages/NotFound";
-import { AppProvider } from "./contexts/AppContext";
+import { AppProvider } from "./contexts/app";
 import { CustomizeProvider } from "./contexts/CustomizeContext";
 import React from "react";
 

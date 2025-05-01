@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useApp } from '@/contexts/AppContext';
+import { useApp } from '@/contexts/app';
 import PowerSwitch from '@/components/controls/PowerSwitch';
 import SystemStatus from '@/components/dashboard/SystemStatus';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

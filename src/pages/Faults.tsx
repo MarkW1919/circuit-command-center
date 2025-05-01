@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
-import { useApp } from '@/contexts/AppContext';
+import { useApp } from '@/contexts/app';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { AlertCircle, CheckCircle, Clock, Thermometer, Wifi, Shield, AlertTriangle } from 'lucide-react';

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useApp } from '@/contexts/AppContext';
+import { useApp } from '@/contexts/app';
 import { SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';

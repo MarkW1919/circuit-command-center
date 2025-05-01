@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useApp } from '@/contexts/AppContext';
+import { useApp } from '@/contexts/app';
 import { Settings, Menu, Power, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
