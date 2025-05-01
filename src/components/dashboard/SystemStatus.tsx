@@ -42,30 +42,30 @@ const SystemStatus = () => {
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <Card>
+      <Card className="bg-gradient-to-b from-gray-900 to-black border-gray-800">
         <CardHeader className="pb-2">
           <CardTitle className="text-lg flex items-center">
-            <Zap className="h-5 w-5 mr-2" />
-            <span>Current Draw</span>
+            <Zap className="h-5 w-5 mr-2 text-cyan-400" />
+            <span className="text-white">Current Draw</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{totalCurrent.toFixed(1)} A</div>
+          <div className="text-2xl font-bold text-white">{totalCurrent.toFixed(1)} A</div>
           <Progress 
             value={getCurrentUtilization(totalCurrent)} 
             className={cn("mt-2 h-2", getCurrentColor(totalCurrent))}
           />
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-gray-400 mt-1">
             {getCurrentUtilization(totalCurrent)}% of max capacity
           </p>
         </CardContent>
       </Card>
       
-      <Card>
+      <Card className="bg-gradient-to-b from-gray-900 to-black border-gray-800">
         <CardHeader className="pb-2">
           <CardTitle className="text-lg flex items-center">
-            <Thermometer className="h-5 w-5 mr-2" />
-            <span>Temperature</span>
+            <Thermometer className="h-5 w-5 mr-2 text-cyan-400" />
+            <span className="text-white">Temperature</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -81,51 +81,51 @@ const SystemStatus = () => {
               'bg-status-active'
             )}
           />
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-gray-400 mt-1">
             {temperature < 50 ? 'Normal' : 
              temperature < 70 ? 'Elevated' : 'High'}
           </p>
         </CardContent>
       </Card>
       
-      <Card>
+      <Card className="bg-gradient-to-b from-gray-900 to-black border-gray-800">
         <CardHeader className="pb-2">
           <CardTitle className="text-lg flex items-center">
-            <AlertCircle className="h-5 w-5 mr-2" />
-            <span>System Health</span>
+            <AlertCircle className="h-5 w-5 mr-2 text-cyan-400" />
+            <span className="text-white">System Health</span>
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-sm">Connection</span>
+              <span className="text-sm text-white">Connection</span>
               <div className="status-indicator">
                 <div className={cn(
                   "status-dot",
                   systemStatus.connected ? "status-dot-active" : "status-dot-inactive"
                 )}></div>
-                <span className="text-xs">{systemStatus.connected ? 'Online' : 'Offline'}</span>
+                <span className="text-xs text-gray-400">{systemStatus.connected ? 'Online' : 'Offline'}</span>
               </div>
             </div>
             
-            <Separator />
+            <Separator className="bg-gray-800" />
             
             <div className="flex items-center justify-between">
-              <span className="text-sm">Watchdog</span>
+              <span className="text-sm text-white">Watchdog</span>
               <div className="status-indicator">
                 <div className={cn(
                   "status-dot",
                   systemStatus.watchdogActive ? "status-dot-active" : "status-dot-inactive"
                 )}></div>
-                <span className="text-xs">{systemStatus.watchdogActive ? 'Active' : 'Inactive'}</span>
+                <span className="text-xs text-gray-400">{systemStatus.watchdogActive ? 'Active' : 'Inactive'}</span>
               </div>
             </div>
             
-            <Separator />
+            <Separator className="bg-gray-800" />
             
             <div className="flex items-center justify-between">
-              <span className="text-sm">Control Mode</span>
-              <span className="text-xs px-2 py-1 bg-primary/10 rounded-full">
+              <span className="text-sm text-white">Control Mode</span>
+              <span className="text-xs px-2 py-1 bg-cyan-900/30 text-cyan-400 rounded-full">
                 {systemStatus.controlMode === 'primary' ? 'Primary' : 'Monitor'}
               </span>
             </div>
