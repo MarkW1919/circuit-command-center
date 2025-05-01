@@ -10,7 +10,8 @@ import {
   Sliders, 
   AlertCircle, 
   SlidersHorizontal, 
-  Settings
+  Settings,
+  ChartLine
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
@@ -27,6 +28,7 @@ const Sidebar = ({ isOpen, onCloseSidebar }: SidebarProps) => {
   const navItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard, path: "/" },
     { id: "control", label: "Controls", icon: Sliders, path: "/controls" },
+    { id: "diagnostics", label: "Diagnostics", icon: ChartLine, path: "/diagnostics" },
     { id: "faults", label: "Faults", icon: AlertCircle, path: "/faults", 
       badge: systemStatus.faults.filter(f => !f.resolved).length },
     { id: "setup", label: "Setup", icon: SlidersHorizontal, path: "/setup" },
