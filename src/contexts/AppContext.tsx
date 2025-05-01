@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { SystemStatus, SwitchStatus, UserSettings, SystemFault, ThemeOption, ModuleStatus } from '@/types';
 import { toast } from '@/components/ui/use-toast';
@@ -185,7 +184,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
           toast({
             title: `${sw.name} ${newActive ? 'activated' : 'deactivated'}`,
             description: newActive ? `Current draw: ${newCurrent}A` : "Current draw: 0A",
-            variant: newActive ? "default" : "secondary"
+            variant: newActive ? "default" : "destructive"
           });
           
           return {

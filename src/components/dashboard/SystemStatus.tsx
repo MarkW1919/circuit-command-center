@@ -53,8 +53,7 @@ const SystemStatus = () => {
           <div className="text-2xl font-bold">{totalCurrent.toFixed(1)} A</div>
           <Progress 
             value={getCurrentUtilization(totalCurrent)} 
-            className="mt-2 h-2"
-            indicatorClassName={getCurrentColor(totalCurrent)}
+            className={cn("mt-2 h-2", getCurrentColor(totalCurrent))}
           />
           <p className="text-xs text-muted-foreground mt-1">
             {getCurrentUtilization(totalCurrent)}% of max capacity
@@ -75,8 +74,8 @@ const SystemStatus = () => {
           </div>
           <Progress 
             value={Math.min(Math.round((temperature / 100) * 100), 100)} 
-            className="mt-2 h-2"
-            indicatorClassName={cn(
+            className={cn(
+              "mt-2 h-2",
               temperature >= 75 ? 'bg-status-danger' :
               temperature >= 60 ? 'bg-status-warning' : 
               'bg-status-active'
