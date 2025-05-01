@@ -1,4 +1,3 @@
-
 // System types
 
 export interface SwitchStatus {
@@ -10,6 +9,7 @@ export interface SwitchStatus {
   disabled: boolean;
   current: number; // Current in amps
   fault?: boolean;
+  equipmentType?: string; // Added equipment type for icon selection
 }
 
 export interface ModuleStatus {

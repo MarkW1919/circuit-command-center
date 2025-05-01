@@ -3,18 +3,37 @@ import React from 'react';
 import { useApp } from '@/contexts/AppContext';
 import { SwitchStatus } from '@/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle, Zap } from 'lucide-react';
+import { AlertCircle, Zap, AirVent, AlarmClock, BatteryCharging, Bell, Fan, Lightbulb, Plug, Power } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface PowerSwitchProps {
   switchData: SwitchStatus;
 }
 
+// Map of switch equipment types to icons
+const equipmentIcons: Record<string, React.ReactNode> = {
+  'light': <Lightbulb />,
+  'fan': <Fan />,
+  'outlet': <Plug />,
+  'alarm': <AlarmClock />,
+  'vent': <AirVent />,
+  'battery': <BatteryCharging />,
+  'bell': <Bell />,
+  'power': <Power />,
+  'default': <Zap />
+};
+
 const PowerSwitch = ({ switchData }: PowerSwitchProps) => {
   const { toggleSwitch, systemStatus } = useApp();
   
   const handleToggle = () => {
     toggleSwitch(switchData.id);
+  };
+
+  // Get the appropriate icon based on equipment type
+  const getSwitchIcon = () => {
+    const iconType = switchData.equipmentType || 'default';
+    return equipmentIcons[iconType] || equipmentIcons['default'];
   };
   
   return (
@@ -53,15 +72,17 @@ const PowerSwitch = ({ switchData }: PowerSwitchProps) => {
             // Reflection effect
             "after:content-[''] after:absolute after:inset-x-0 after:top-0 after:h-1/3 after:rounded-t-full after:bg-gradient-to-b after:from-white/10 after:to-transparent after:opacity-30"
           )}>
-            {/* Icon in cyan/blue color */}
+            {/* Icon for the specific equipment type */}
             <div className={cn(
               "absolute inset-0 flex items-center justify-center transition-all duration-300",
               switchData.active ? "opacity-100 scale-100" : "opacity-60 scale-95"
             )}>
-              <Zap className={cn(
+              <div className={cn(
                 "h-10 w-10 transition-all duration-300",
                 switchData.active ? "text-cyan-400" : "text-cyan-600"
-              )} />
+              )}>
+                {getSwitchIcon()}
+              </div>
             </div>
           </div>
         </button>

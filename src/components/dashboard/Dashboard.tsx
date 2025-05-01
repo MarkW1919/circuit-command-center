@@ -13,6 +13,19 @@ const Dashboard = () => {
   // Get primary module switches
   const primarySwitches = switches.filter(sw => sw.moduleId === 'primary');
   
+  // Assign equipment types to the switches if not already assigned
+  const switchesWithEquipment = primarySwitches.map((sw, index) => {
+    if (!sw.equipmentType) {
+      // Assign different equipment types based on index
+      const equipmentTypes = ['light', 'fan', 'outlet', 'alarm', 'vent', 'battery', 'bell', 'power'];
+      return {
+        ...sw,
+        equipmentType: equipmentTypes[index % equipmentTypes.length]
+      };
+    }
+    return sw;
+  });
+  
   // Check if there are active faults
   const hasActiveFaults = systemStatus.faults.some(fault => !fault.resolved);
   
@@ -72,12 +85,12 @@ const Dashboard = () => {
         
         <div className="grid grid-cols-2 gap-8 max-w-4xl mx-auto">
           <div className="space-y-8">
-            {primarySwitches.slice(0, 4).map(sw => (
+            {switchesWithEquipment.slice(0, 4).map(sw => (
               <PowerSwitch key={sw.id} switchData={sw} />
             ))}
           </div>
           <div className="space-y-8">
-            {primarySwitches.slice(4, 8).map(sw => (
+            {switchesWithEquipment.slice(4, 8).map(sw => (
               <PowerSwitch key={sw.id} switchData={sw} />
             ))}
           </div>
