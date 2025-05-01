@@ -11,6 +11,7 @@ import Setup from "./pages/Setup";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import { AppProvider } from "./contexts/AppContext";
+import React from "react";
 
 const queryClient = new QueryClient();
 
