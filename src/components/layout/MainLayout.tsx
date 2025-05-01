@@ -22,8 +22,22 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       <Header toggleSidebar={toggleSidebar} />
       
       <div className="flex flex-1">
-        {/* Remove the props that are causing the error */}
-        <Sidebar />
+        <div className={cn(
+          "fixed inset-y-0 left-0 z-20 bg-sidebar transform transition-transform duration-200 ease-in-out",
+          isMobile ? (sidebarOpen ? "translate-x-0" : "-translate-x-full") : "translate-x-0",
+          "w-64"
+        )}>
+          <Sidebar />
+        </div>
+        
+        {/* Overlay to close sidebar when clicked (mobile only) */}
+        {isMobile && sidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-10" 
+            onClick={() => setSidebarOpen(false)}
+            aria-hidden="true"
+          />
+        )}
         
         <main className={cn(
           "flex-1 transition-all duration-200",
