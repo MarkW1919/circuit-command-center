@@ -5,7 +5,8 @@ import PowerSwitch from '@/components/controls/PowerSwitch';
 import SystemStatus from '@/components/dashboard/SystemStatus';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, Power } from 'lucide-react';
+import { AlertCircle, Power, Fan, Lightbulb, Gauge, Thermometer } from 'lucide-react';
+import CustomIconButton from '@/components/customize/CustomIconButton';
 
 const Dashboard = () => {
   const { switches, systemStatus, connectBluetooth, isConnecting } = useApp();
@@ -91,6 +92,78 @@ const Dashboard = () => {
             ))}
           </div>
         </div>
+        
+        {/* Auto Controls Demo Section */}
+        <Card className="mt-10 bg-gray-900 border-gray-800">
+          <CardHeader>
+            <CardTitle className="text-white">Vehicle Controls Demo</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <CustomIconButton
+                label="Fan"
+                icon="fan"
+                buttonStyle="glossy"
+                buttonType="round"
+                color="#3b82f6"
+                glowEffect={true}
+                state="active"
+              />
+              <CustomIconButton
+                label="Lights"
+                icon="lightbulb"
+                buttonStyle="metal"
+                buttonType="round"
+                color="#6366f1"
+              />
+              <CustomIconButton
+                label="Temperature"
+                icon="thermometer"
+                buttonStyle="carbon"
+                buttonType="rectangular"
+                color="#000000"
+              />
+              <CustomIconButton
+                label="Dashboard"
+                icon="gauge"
+                buttonStyle="glass"
+                buttonType="oval"
+                glowEffect={true}
+              />
+              <CustomIconButton
+                label="Ejector Seat"
+                icon="power"
+                buttonStyle="military"
+                buttonType="flip"
+                state="active"
+                color="#f43f5e"
+              />
+              <CustomIconButton
+                label="Heater"
+                icon="thermometer"
+                buttonStyle="rubber"
+                buttonType="rectangular"
+                color="#212121"
+              />
+              <CustomIconButton
+                label="Lock"
+                icon="lock"
+                buttonStyle="glossy"
+                buttonType="round"
+                color="#ef4444"
+                state="pressed"
+              />
+              <CustomIconButton
+                label="Parking"
+                icon="car"
+                buttonStyle="glass"
+                buttonType="oval"
+                color="#22c55e"
+                state="disabled"
+              />
+            </div>
+          </CardContent>
+        </Card>
         
         <div className="mt-16 text-center">
           <h2 className="text-4xl font-bold bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 text-transparent bg-clip-text inline-block">
