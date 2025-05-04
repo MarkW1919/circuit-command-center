@@ -78,11 +78,7 @@ const Dashboard = () => {
         <SystemStatus />
       )}
       
-      <div className="mt-10 text-center pb-4">
-        <div className="w-48 h-16 mx-auto mb-8 bg-green-500 rounded-xl flex items-center justify-center text-4xl font-bold text-black border-4 border-gray-600">
-          0.0
-        </div>
-        
+      <div className="mt-10 pb-4">
         <div className="grid grid-cols-2 gap-8 max-w-4xl mx-auto">
           <div className="space-y-8">
             {switchesWithEquipment.slice(0, 4).map(sw => (
