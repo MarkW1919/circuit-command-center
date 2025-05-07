@@ -13,7 +13,6 @@ import CustomizePage from "./pages/CustomizePage";
 import ButtonCustomizePage from "./pages/ButtonCustomizePage";
 import Diagnostics from "./pages/Diagnostics";
 import NotFound from "./pages/NotFound";
-import AnimatedWinchDemo from "./components/customize/AnimatedWinchDemo";
 import { AppProvider } from "./contexts/app";
 import { CustomizeProvider } from "./contexts/CustomizeContext";
 import React from "react";
@@ -37,7 +36,6 @@ const App = () => (
               <Route path="/customize" element={<CustomizePage />} />
               <Route path="/buttons" element={<ButtonCustomizePage />} />
               <Route path="/diagnostics" element={<Diagnostics />} />
-              <Route path="/winch-demo" element={<AnimatedWinchDemo />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

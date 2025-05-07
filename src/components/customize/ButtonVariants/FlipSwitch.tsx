@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils';
 import * as icons from 'lucide-react';
 import { Power } from 'lucide-react';
 import AnimatedIcon from '@/components/controls/AnimatedIcon';
-import { isAnimatableEquipment, isWinchType } from '../utils/buttonUtils';
-import { AnimatableEquipment, WinchDirection } from '@/types';
+import { isAnimatableEquipment } from '../utils/buttonUtils';
+import { AnimatableEquipment } from '@/types';
 
 interface FlipSwitchProps {
   icon: string;
@@ -14,7 +14,6 @@ interface FlipSwitchProps {
   animationEnabled?: boolean;
   animationSpeed?: number;
   animationIntensity?: number;
-  direction?: WinchDirection; // For winch direction control
 }
 
 const FlipSwitch: React.FC<FlipSwitchProps> = ({
@@ -23,8 +22,7 @@ const FlipSwitch: React.FC<FlipSwitchProps> = ({
   size,
   animationEnabled = true,
   animationSpeed = 1,
-  animationIntensity = 1,
-  direction = 'in'
+  animationIntensity = 1
 }) => {
   // Get the icon component dynamically from lucide-react
   const IconComponent = (icons as any)[icon.charAt(0).toUpperCase() + icon.slice(1)] || Power;
@@ -35,22 +33,11 @@ const FlipSwitch: React.FC<FlipSwitchProps> = ({
     lg: 32
   };
 
-  // Set background color based on state and winch direction
-  const getBgColor = () => {
-    if (state !== 'active') return "bg-gray-900";
-    
-    if (isWinchType(icon)) {
-      return direction === 'in' ? "bg-green-900" : "bg-amber-900";
-    }
-    
-    return "bg-red-900";
-  };
-
   return (
     <div className="relative">
       <div className={cn(
-        "rounded-md p-1 h-16 w-20 flex flex-col overflow-hidden",
-        getBgColor()
+        "bg-gray-900 rounded-md p-1 h-16 w-20 flex flex-col overflow-hidden",
+        state === 'active' ? "bg-red-900" : "bg-gray-900"
       )}>
         <div className={cn(
           "h-3/4 w-full bg-gray-800 rounded-t-sm border border-gray-700 flex items-center justify-center relative transition-transform duration-300",
@@ -65,7 +52,6 @@ const FlipSwitch: React.FC<FlipSwitchProps> = ({
               size={iconSizes[size]}
               speed={animationSpeed}
               intensity={animationIntensity}
-              direction={direction}
               className="text-white relative z-10"
             />
           ) : (
