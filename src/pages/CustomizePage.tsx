@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -22,7 +21,8 @@ const CustomizePage = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [onboardingStep, setOnboardingStep] = useState(0);
-  
+  const [showDemo, setShowDemo] = useState(true);
+
   // Check if this is the first time the user is visiting this page
   useEffect(() => {
     const hasVisited = localStorage.getItem('customizeVisited');
@@ -45,6 +45,16 @@ const CustomizePage = () => {
     setShowOnboarding(false);
   };
   
+  const handleDismissDemo = () => {
+    setShowDemo(false);
+    localStorage.setItem('customize_page_demo_seen', 'true');
+    toast({
+      title: "Demo dismissed",
+      description: "You can always bring it back from the settings panel.",
+      variant: "default"
+    });
+  };
+
   const onboardingSteps = [
     {
       title: "Welcome to Customization",

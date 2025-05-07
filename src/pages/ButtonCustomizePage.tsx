@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -15,6 +14,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import AnimatedButtonsDemo from '@/components/customize/AnimatedButtonsDemo';
 
 const ButtonCustomizePage = () => {
   const { saveLayout } = useCustomize();
@@ -22,7 +22,8 @@ const ButtonCustomizePage = () => {
   const [activeTab, setActiveTab] = useState('customize');
   const [showTutorial, setShowTutorial] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(0);
-  
+  const [showDemo, setShowDemo] = useState(false);
+
   // Check if user has seen the tutorial before
   useEffect(() => {
     const hasSeen = localStorage.getItem('buttonCustomizeSeen');
@@ -30,7 +31,7 @@ const ButtonCustomizePage = () => {
       setShowTutorial(true);
     }
   }, []);
-  
+
   const handleSaveLayout = () => {
     saveLayout();
     toast({
@@ -141,7 +142,21 @@ const ButtonCustomizePage = () => {
   }
   
   return (
-    <MainLayout>
+    <div className="container mx-auto p-4 space-y-6">
+      <h1 className="text-2xl font-bold">Button Customizer</h1>
+      
+      {/* Demo section */}
+      {showDemo && (
+        <div className="mb-6">
+          <AnimatedButtonsDemo />
+          <div className="flex justify-end mt-2">
+            <Button variant="outline" size="sm" onClick={handleDismissDemo}>
+              Dismiss Demo
+            </Button>
+          </div>
+        </div>
+      )}
+      
       <DndProvider backend={HTML5Backend}>
         <div className="space-y-6">
           <div className="flex justify-between items-center">
@@ -324,7 +339,7 @@ const ButtonCustomizePage = () => {
           </Tabs>
         </div>
       </DndProvider>
-    </MainLayout>
+    </div>
   );
 };
 

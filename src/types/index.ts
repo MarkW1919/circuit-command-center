@@ -1,3 +1,4 @@
+
 // System types
 
 export interface SwitchStatus {
@@ -56,6 +57,28 @@ export interface UserSettings {
   theme: ThemeOption;
   autoConnect: boolean;
   safeMode: boolean;
+  rememberLayout: boolean;
+  overloadProtection: boolean;
+  notifyFaults: boolean;
+  notifyUpdates: boolean;
+  soundEffects: boolean;
   customLabels: Record<string, string>;
   dashboard: DashboardItem[];
 }
+
+// Animation types for the new component buttons
+export interface AnimationConfig {
+  enabled: boolean;
+  speed: number; // 0.5 to 2.0 multiplier
+  intensity: number; // 0 to 1
+}
+
+// Equipment types that have animations available
+export type AnimatableEquipment = 
+  | "fan" 
+  | "winch" 
+  | "pump" 
+  | "led" 
+  | "compressor" 
+  | "light"
+  | "heater";

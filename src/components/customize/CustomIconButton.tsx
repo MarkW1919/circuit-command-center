@@ -4,6 +4,8 @@ import { Power, LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import * as icons from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import AnimatedIcon from '@/components/controls/AnimatedIcon';
+import { AnimatableEquipment } from '@/types';
 
 interface CustomIconButtonProps {
   label: string;
@@ -17,6 +19,10 @@ interface CustomIconButtonProps {
   onClick?: () => void;
   showTooltip?: boolean;
   description?: string;
+  // Animation properties
+  animationEnabled?: boolean;
+  animationSpeed?: number;
+  animationIntensity?: number;
 }
 
 const CustomIconButton = ({ 
@@ -30,7 +36,11 @@ const CustomIconButton = ({
   state = 'default',
   onClick,
   showTooltip = false,
-  description
+  description,
+  // Animation properties
+  animationEnabled = true,
+  animationSpeed = 1,
+  animationIntensity = 1
 }: CustomIconButtonProps) => {
   // Get the icon component dynamically from lucide-react
   const IconComponent = (icons as any)[icon.charAt(0).toUpperCase() + icon.slice(1)] || Power;
@@ -115,11 +125,27 @@ const CustomIconButton = ({
           )}>
             <div className="absolute inset-0 bg-gradient-to-b from-gray-600 to-gray-800 opacity-70"></div>
             <div className="absolute top-1/3 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-gray-600 rounded-full"></div>
-            <IconComponent size={iconSizes[size]} className="text-white relative z-10" />
+            {animationEnabled && isAnimatableEquipment(icon) ? (
+              <AnimatedIcon 
+                type={icon as AnimatableEquipment}
+                isActive={state === 'active'}
+                size={iconSizes[size]}
+                speed={animationSpeed}
+                intensity={animationIntensity}
+                className="text-white relative z-10"
+              />
+            ) : (
+              <IconComponent size={iconSizes[size]} className="text-white relative z-10" />
+            )}
           </div>
         </div>
       </div>
     );
+  };
+
+  // Helper to check if equipment type can be animated
+  const isAnimatableEquipment = (type: string): type is AnimatableEquipment => {
+    return ['fan', 'winch', 'pump', 'led', 'compressor', 'light', 'heater'].includes(type.toLowerCase());
   };
   
   const buttonContent = (
@@ -149,14 +175,28 @@ const CustomIconButton = ({
                          borderTopRightRadius: buttonType === 'rectangular' ? '0.375rem' : undefined}}></div>
           )}
           
-          {/* Button icon with proper styling */}
-          <IconComponent 
-            size={iconSizes[size]} 
-            className={cn(
-              "relative z-10",
-              buttonStyle === 'glass' ? "text-white drop-shadow-lg" : "text-white"
-            )} 
-          />
+          {/* Button icon with proper styling - choose between animated and static */}
+          {animationEnabled && isAnimatableEquipment(icon) ? (
+            <AnimatedIcon 
+              type={icon as AnimatableEquipment}
+              isActive={state === 'active'}
+              size={iconSizes[size]}
+              speed={animationSpeed}
+              intensity={animationIntensity}
+              className={cn(
+                "relative z-10",
+                buttonStyle === 'glass' ? "text-white drop-shadow-lg" : "text-white"
+              )}
+            />
+          ) : (
+            <IconComponent 
+              size={iconSizes[size]} 
+              className={cn(
+                "relative z-10",
+                buttonStyle === 'glass' ? "text-white drop-shadow-lg" : "text-white"
+              )} 
+            />
+          )}
           
           {/* Add LED indicator for active state */}
           {state === 'active' && (
