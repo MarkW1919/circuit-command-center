@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import StandardButton from './ButtonVariants/StandardButton';
 import FlipSwitch from './ButtonVariants/FlipSwitch';
 import { iconSizes, sizeClasses, getStyleDescription, isWinchType } from './utils/buttonUtils';
 import { WinchDirection } from '@/types';
+import { cn } from '@/lib/utils';
 
 interface CustomIconButtonProps {
   label: string;
