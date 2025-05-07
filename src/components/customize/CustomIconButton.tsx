@@ -3,6 +3,7 @@ import React from 'react';
 import { Power, LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import * as icons from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface CustomIconButtonProps {
   label: string;
@@ -14,6 +15,8 @@ interface CustomIconButtonProps {
   buttonType?: 'round' | 'rectangular' | 'oval' | 'flip';
   state?: 'default' | 'active' | 'pressed' | 'disabled';
   onClick?: () => void;
+  showTooltip?: boolean;
+  description?: string;
 }
 
 const CustomIconButton = ({ 
@@ -25,7 +28,9 @@ const CustomIconButton = ({
   buttonStyle = 'glossy',
   buttonType = 'round',
   state = 'default',
-  onClick 
+  onClick,
+  showTooltip = false,
+  description
 }: CustomIconButtonProps) => {
   // Get the icon component dynamically from lucide-react
   const IconComponent = (icons as any)[icon.charAt(0).toUpperCase() + icon.slice(1)] || Power;
@@ -48,6 +53,19 @@ const CustomIconButton = ({
     rectangular: 'rounded-md',
     oval: 'rounded-full aspect-[1.5/1]',
     flip: 'rounded-md'
+  };
+
+  // Human-readable descriptions
+  const getStyleDescription = () => {
+    switch (buttonStyle) {
+      case 'metal': return 'Brushed metal finish with reflective surface';
+      case 'carbon': return 'Carbon fiber texture with woven pattern';
+      case 'rubber': return 'Rubber-coated with matte tactile finish';
+      case 'glass': return 'Transparent glass effect with subtle reflection';
+      case 'military': return 'Industrial-grade with rugged construction';
+      case 'glossy': return 'High-gloss shiny finish with light reflection';
+      default: return '';
+    }
   };
 
   // Button style-specific classes and effects
@@ -104,7 +122,7 @@ const CustomIconButton = ({
     );
   };
   
-  return (
+  const buttonContent = (
     <div className="flex flex-col items-center">
       {buttonType === 'flip' ? (
         renderFlipSwitch()
@@ -112,7 +130,7 @@ const CustomIconButton = ({
         <button
           onClick={state === 'disabled' ? undefined : onClick}
           className={cn(
-            "flex items-center justify-center mb-1 relative transition-all duration-300",
+            "flex items-center justify-center mb-1 relative transition-all duration-300 hover:scale-105 active:scale-95",
             sizeClasses[size],
             buttonTypeClasses[buttonType],
             getStyleClasses(),
@@ -144,11 +162,33 @@ const CustomIconButton = ({
           {state === 'active' && (
             <div className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 animate-pulse"></div>
           )}
+
+          {/* Add ripple effect for pressed state */}
+          {state === 'pressed' && (
+            <div className="absolute inset-0 bg-white opacity-20 rounded-full animate-ping"></div>
+          )}
         </button>
       )}
       <span className="text-xs text-center mt-1 text-gray-200">{label}</span>
     </div>
   );
+  
+  if (showTooltip && description) {
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            {buttonContent}
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{description || getStyleDescription()}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+  
+  return buttonContent;
 };
 
 export default CustomIconButton;
