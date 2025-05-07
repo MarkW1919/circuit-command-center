@@ -38,6 +38,11 @@ export const initialSettings: UserSettings = {
   theme: 'system',
   autoConnect: true,
   safeMode: true,
+  rememberLayout: true,
+  overloadProtection: true,
+  notifyFaults: true,
+  notifyUpdates: false,
+  soundEffects: false,
   customLabels: {},
   dashboard: []
 };

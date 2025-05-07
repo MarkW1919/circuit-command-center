@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -36,7 +37,7 @@ const CustomizePage = () => {
     toast({
       title: "Layout saved",
       description: "Your custom layout has been saved successfully.",
-      variant: "success",
+      variant: "default",
     });
   };
   

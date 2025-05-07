@@ -6,9 +6,9 @@ import {
   Lightbulb, 
   CircleArrowDown, 
   CircleArrowUp,
-  Compressor,
-  Water,
-  Pump
+  Gauge,
+  Droplets,
+  Waves
 } from 'lucide-react';
 import { AnimatableEquipment } from '@/types';
 
@@ -141,13 +141,13 @@ const AnimatedIcon = ({
           </div>
         );
       case 'compressor':
-        return <Compressor size={size} style={animationStyle} />;
+        return <Gauge size={size} style={animationStyle} />;
       case 'pump':
         return (
           <div className="relative" style={animationStyle}>
-            <Pump size={size} />
+            <Waves size={size} />
             {isActive && (
-              <Water 
+              <Droplets 
                 size={size/2} 
                 className={cn(
                   "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-400 opacity-70",
