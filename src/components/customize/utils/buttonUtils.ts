@@ -73,3 +73,8 @@ export const getStateClasses = (state: string): string => {
 export const isAnimatableEquipment = (type: string): type is AnimatableEquipment => {
   return ['fan', 'winch', 'pump', 'led', 'compressor', 'light', 'heater'].includes(type.toLowerCase());
 };
+
+// Winch specific configurations
+export const isWinchType = (type: string): boolean => {
+  return type.toLowerCase() === 'winch';
+};

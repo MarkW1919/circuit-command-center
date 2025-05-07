@@ -82,3 +82,10 @@ export type AnimatableEquipment =
   | "compressor" 
   | "light"
   | "heater";
+
+// Winch specific types
+export type WinchDirection = 'in' | 'out';
+export interface WinchConfig {
+  direction: WinchDirection;
+  momentary: boolean;
+}

@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils';
 import * as icons from 'lucide-react';
 import { Power } from 'lucide-react';
 import AnimatedIcon from '@/components/controls/AnimatedIcon';
-import { buttonTypeClasses, getStyleClasses, getStateClasses, isAnimatableEquipment } from '../utils/buttonUtils';
-import { AnimatableEquipment } from '@/types';
+import { buttonTypeClasses, getStyleClasses, getStateClasses, isAnimatableEquipment, isWinchType } from '../utils/buttonUtils';
+import { AnimatableEquipment, WinchDirection } from '@/types';
 
 interface StandardButtonProps {
   icon: string;
@@ -21,6 +21,7 @@ interface StandardButtonProps {
   animationIntensity?: number;
   iconSizes: Record<string, number>;
   sizeClasses: Record<string, string>;
+  direction?: WinchDirection; // For winch direction control
 }
 
 const StandardButton: React.FC<StandardButtonProps> = ({
@@ -36,10 +37,27 @@ const StandardButton: React.FC<StandardButtonProps> = ({
   animationSpeed = 1,
   animationIntensity = 1,
   iconSizes,
-  sizeClasses
+  sizeClasses,
+  direction = 'in'
 }) => {
   // Get the icon component dynamically from lucide-react
   const IconComponent = (icons as any)[icon.charAt(0).toUpperCase() + icon.slice(1)] || Power;
+  
+  // Set appropriate color for winch based on direction when active
+  const getButtonColor = () => {
+    if (isWinchType(icon) && state === 'active') {
+      return direction === 'in' ? '#22c55e' : '#f59e0b'; // Green for IN, Amber for OUT
+    }
+    return color;
+  };
+  
+  // Set appropriate glow color for winch based on direction
+  const getGlowColor = () => {
+    if (isWinchType(icon) && state === 'active') {
+      return direction === 'in' ? '#22c55e' : '#f59e0b'; 
+    }
+    return color;
+  };
 
   return (
     <button
@@ -53,8 +71,8 @@ const StandardButton: React.FC<StandardButtonProps> = ({
         glowEffect ? 'animate-pulse' : ''
       )}
       style={{ 
-        backgroundColor: buttonStyle !== 'glass' ? color : 'rgba(255, 255, 255, 0.1)',
-        boxShadow: glowEffect ? `0 0 15px ${color}` : buttonStyle === 'rubber' ? 'inset 0 2px 4px rgba(0, 0, 0, 0.5)' : 'none'
+        backgroundColor: buttonStyle !== 'glass' ? getButtonColor() : 'rgba(255, 255, 255, 0.1)',
+        boxShadow: glowEffect ? `0 0 15px ${getGlowColor()}` : buttonStyle === 'rubber' ? 'inset 0 2px 4px rgba(0, 0, 0, 0.5)' : 'none'
       }}
     >
       {/* Create inner lighting effects */}
@@ -76,6 +94,7 @@ const StandardButton: React.FC<StandardButtonProps> = ({
           size={iconSizes[size]}
           speed={animationSpeed}
           intensity={animationIntensity}
+          direction={direction}
           className={cn(
             "relative z-10",
             buttonStyle === 'glass' ? "text-white drop-shadow-lg" : "text-white"
@@ -91,9 +110,12 @@ const StandardButton: React.FC<StandardButtonProps> = ({
         />
       )}
       
-      {/* Add LED indicator for active state */}
+      {/* Add LED indicator for active state with direction-specific color for winch */}
       {state === 'active' && (
-        <div className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 animate-pulse"></div>
+        <div className={cn(
+          "absolute top-1 right-1 h-2 w-2 rounded-full animate-pulse",
+          isWinchType(icon) ? (direction === 'in' ? "bg-green-500" : "bg-amber-500") : "bg-red-500"
+        )}></div>
       )}
 
       {/* Add ripple effect for pressed state */}

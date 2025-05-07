@@ -10,7 +10,8 @@ import {
   Droplets,
   Waves
 } from 'lucide-react';
-import { AnimatableEquipment } from '@/types';
+import { AnimatableEquipment, WinchDirection } from '@/types';
+import AnimatedWinchIcon from './AnimatedWinchIcon';
 
 interface AnimatedIconProps {
   type: AnimatableEquipment | string;
@@ -19,6 +20,7 @@ interface AnimatedIconProps {
   className?: string;
   speed?: number; // animation speed multiplier
   intensity?: number; // animation intensity (0-1)
+  direction?: WinchDirection; // for winch direction control
 }
 
 const AnimatedIcon = ({
@@ -27,7 +29,8 @@ const AnimatedIcon = ({
   size = 24,
   className,
   speed = 1,
-  intensity = 1
+  intensity = 1,
+  direction = 'in' // default winch direction
 }: AnimatedIconProps) => {
   const [rotation, setRotation] = useState(0);
   const [scale, setScale] = useState(1);
@@ -57,15 +60,7 @@ const AnimatedIcon = ({
           break;
           
         case 'winch':
-          // Winch animation - alternating up/down movement
-          let direction = 1;
-          interval = setInterval(() => {
-            setRotation(prev => {
-              const newRotation = prev + (direction * 20 * speed);
-              if (newRotation > 40 || newRotation < -40) direction *= -1;
-              return newRotation;
-            });
-          }, 100 / speed);
+          // Winch animation is handled by the specialized component
           break;
           
         case 'pump':
@@ -115,6 +110,16 @@ const AnimatedIcon = ({
     switch (type) {
       case 'fan':
         return <Fan size={size} style={animationStyle} />;
+      case 'winch':
+        return (
+          <AnimatedWinchIcon
+            isActive={isActive}
+            direction={direction}
+            size={size}
+            speed={speed}
+            intensity={intensity}
+          />
+        );
       case 'light':
       case 'led':
         return (
@@ -133,15 +138,6 @@ const AnimatedIcon = ({
             )}
           </div>
         );
-      case 'winch':
-        return (
-          <div className="relative" style={animationStyle}>
-            <CircleArrowUp size={size} className="absolute opacity-60" />
-            <CircleArrowDown size={size} className="absolute opacity-60" />
-          </div>
-        );
-      case 'compressor':
-        return <Gauge size={size} style={animationStyle} />;
       case 'pump':
         return (
           <div className="relative" style={animationStyle}>
@@ -174,6 +170,8 @@ const AnimatedIcon = ({
             )}
           </div>
         );
+      case 'compressor':
+        return <Gauge size={size} style={animationStyle} />;
       default:
         return <div className="h-6 w-6 rounded-full bg-gray-300"></div>;
     }
