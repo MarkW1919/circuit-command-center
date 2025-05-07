@@ -1,37 +1,35 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import MainLayout from '@/components/layout/MainLayout';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Save, HelpCircle, Check, ArrowRight, Lightbulb } from 'lucide-react';
+import { Save, HelpCircle } from 'lucide-react';
 import ButtonCustomizer from '@/components/customize/ButtonCustomizer';
 import { useCustomize } from '@/contexts/CustomizeContext';
-import { useToast } from '@/components/ui/use-toast';
-import CustomIconButton from '@/components/customize/CustomIconButton';
+import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import ButtonPreview from '@/components/customize/ButtonPreview';
+import ButtonTutorial from '@/components/customize/ButtonTutorial';
+import { useButtonTutorial } from '@/hooks/useButtonTutorial';
 import AnimatedButtonsDemo from '@/components/customize/AnimatedButtonsDemo';
 
 const ButtonCustomizePage = () => {
   const { saveLayout } = useCustomize();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('customize');
-  const [showTutorial, setShowTutorial] = useState(false);
-  const [tutorialStep, setTutorialStep] = useState(0);
   const [showDemo, setShowDemo] = useState(false);
-
-  // Check if user has seen the tutorial before
-  useEffect(() => {
-    const hasSeen = localStorage.getItem('buttonCustomizeSeen');
-    if (!hasSeen) {
-      setShowTutorial(true);
-    }
-  }, []);
+  
+  const {
+    showTutorial,
+    tutorialStep,
+    setTutorialStep,
+    completeTutorial,
+    tutorialSteps
+  } = useButtonTutorial();
 
   const handleSaveLayout = () => {
     saveLayout();
@@ -41,107 +39,20 @@ const ButtonCustomizePage = () => {
       variant: "default",
     });
   };
-
-  const completeTutorial = () => {
-    localStorage.setItem('buttonCustomizeSeen', 'true');
-    setShowTutorial(false);
-  };
   
   const handleDismissDemo = () => {
     setShowDemo(false);
   };
   
-  const tutorialSteps = [
-    {
-      title: "Design Custom Control Buttons",
-      description: "Create beautiful, functional control buttons that match your specific needs.",
-      tips: ["Select button styles that match your device or vehicle type", 
-             "Use colors that are easy to distinguish", 
-             "Add clear labels so controls are easy to identify"]
-    },
-    {
-      title: "Choose Icons and Colors",
-      description: "Pick from a wide range of icons and colors to create visually distinct controls.",
-      tips: ["Use consistent icons for similar functions", 
-             "Select contrasting colors for important controls",
-             "Consider using glow effects for critical functions"]
-    },
-    {
-      title: "Arrange Your Layout",
-      description: "Group related buttons together in an intuitive layout for easy access.",
-      tips: ["Place frequently used controls in easy-to-reach positions",
-             "Group related functions together",
-             "Use a grid layout for organized, consistent spacing"]
-    }
-  ];
-  
   if (showTutorial) {
     return (
       <MainLayout>
-        <div className="max-w-2xl mx-auto mt-8">
-          <Card className="border-purple-500/30">
-            <CardHeader>
-              <CardTitle className="text-2xl flex items-center">
-                <Lightbulb className="h-8 w-8 text-purple-400 mr-4" />
-                {tutorialSteps[tutorialStep].title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <p className="text-lg">{tutorialSteps[tutorialStep].description}</p>
-              
-              <div className="bg-gray-800/50 p-4 rounded-lg">
-                <h3 className="text-sm font-medium text-gray-300 mb-2">DESIGN TIPS:</h3>
-                <ul className="space-y-2">
-                  {tutorialSteps[tutorialStep].tips.map((tip, index) => (
-                    <li key={index} className="flex items-start">
-                      <Check className="h-4 w-4 text-green-400 mr-2 mt-1 flex-shrink-0" />
-                      <span className="text-sm">{tip}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              
-              <div className="flex justify-center space-x-4">
-                {tutorialStep === 1 && (
-                  <>
-                    <CustomIconButton
-                      label="Light" 
-                      icon="lightbulb" 
-                      color="#3b82f6"
-                      glowEffect={true}
-                      size="sm"
-                    />
-                    <CustomIconButton
-                      label="Fan"
-                      icon="fan"
-                      color="#22c55e"
-                      size="sm"
-                    />
-                  </>
-                )}
-              </div>
-            </CardContent>
-            <CardFooter className="flex flex-col space-y-4">
-              <Progress value={((tutorialStep + 1) / tutorialSteps.length) * 100} className="w-full" />
-              <div className="flex justify-between w-full">
-                <Button 
-                  variant="outline" 
-                  onClick={() => tutorialStep > 0 ? setTutorialStep(tutorialStep - 1) : completeTutorial()}
-                >
-                  {tutorialStep > 0 ? "Back" : "Skip Tutorial"}
-                </Button>
-                <Button 
-                  onClick={() => tutorialStep < tutorialSteps.length - 1 ? setTutorialStep(tutorialStep + 1) : completeTutorial()}
-                  className="bg-purple-600 hover:bg-purple-700"
-                >
-                  {tutorialStep < tutorialSteps.length - 1 ? (
-                    <>Next <ArrowRight className="ml-2 h-4 w-4" /></>
-                  ) : "Start Customizing"}
-                </Button>
-              </div>
-            </CardFooter>
-          </Card>
-        </div>
+        <ButtonTutorial 
+          tutorialStep={tutorialStep}
+          tutorialSteps={tutorialSteps}
+          setTutorialStep={setTutorialStep}
+          completeTutorial={completeTutorial}
+        />
       </MainLayout>
     );
   }
@@ -211,135 +122,7 @@ const ButtonCustomizePage = () => {
             </TabsContent>
             
             <TabsContent value="preview" className="mt-0">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Vehicle Controls Preview</CardTitle>
-                  <CardDescription>
-                    See how your custom buttons will appear in your control interface
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="p-4 rounded-lg bg-gray-900 border border-gray-800">
-                    <h3 className="text-sm font-medium text-gray-400 mb-4">CONTROL PANEL</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <CustomIconButton
-                        label="Fan"
-                        icon="fan"
-                        buttonStyle="glossy"
-                        buttonType="round"
-                        color="#3b82f6"
-                        glowEffect={true}
-                        state="active"
-                        showTooltip={true}
-                      />
-                      <CustomIconButton
-                        label="Lights"
-                        icon="lightbulb"
-                        buttonStyle="metal"
-                        buttonType="round"
-                        color="#6366f1"
-                        showTooltip={true}
-                      />
-                      <CustomIconButton
-                        label="Temperature"
-                        icon="thermometer"
-                        buttonStyle="carbon"
-                        buttonType="rectangular"
-                        color="#000000"
-                        showTooltip={true}
-                      />
-                      <CustomIconButton
-                        label="Dashboard"
-                        icon="gauge"
-                        buttonStyle="glass"
-                        buttonType="oval"
-                        glowEffect={true}
-                        showTooltip={true}
-                      />
-                      <CustomIconButton
-                        label="Ejector Seat"
-                        icon="power"
-                        buttonStyle="military"
-                        buttonType="flip"
-                        state="active"
-                        color="#f43f5e"
-                        showTooltip={true}
-                      />
-                      <CustomIconButton
-                        label="Heater"
-                        icon="thermometer"
-                        buttonStyle="rubber"
-                        buttonType="rectangular"
-                        color="#212121"
-                        showTooltip={true}
-                      />
-                      <CustomIconButton
-                        label="Lock"
-                        icon="lock"
-                        buttonStyle="glossy"
-                        buttonType="round"
-                        color="#ef4444"
-                        state="pressed"
-                        showTooltip={true}
-                      />
-                      <CustomIconButton
-                        label="Parking"
-                        icon="car"
-                        buttonStyle="glass"
-                        buttonType="oval"
-                        color="#22c55e"
-                        state="disabled"
-                        showTooltip={true}
-                      />
-                    </div>
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div className="space-y-4">
-                    <h3 className="text-base font-medium">About Button States</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="space-y-2 text-center">
-                        <CustomIconButton
-                          label="Default"
-                          icon="power"
-                          size="sm"
-                        />
-                        <p className="text-xs text-gray-400">Standard state</p>
-                      </div>
-                      <div className="space-y-2 text-center">
-                        <CustomIconButton
-                          label="Active"
-                          icon="power"
-                          state="active"
-                          size="sm"
-                          color="#22c55e"
-                        />
-                        <p className="text-xs text-gray-400">Currently on/enabled</p>
-                      </div>
-                      <div className="space-y-2 text-center">
-                        <CustomIconButton
-                          label="Pressed"
-                          icon="power"
-                          state="pressed"
-                          size="sm"
-                          color="#3b82f6"
-                        />
-                        <p className="text-xs text-gray-400">Being pressed</p>
-                      </div>
-                      <div className="space-y-2 text-center">
-                        <CustomIconButton
-                          label="Disabled"
-                          icon="power"
-                          state="disabled"
-                          size="sm"
-                        />
-                        <p className="text-xs text-gray-400">Cannot be used</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <ButtonPreview />
             </TabsContent>
           </Tabs>
         </div>
