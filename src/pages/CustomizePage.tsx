@@ -3,29 +3,136 @@ import React, { useState, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import MainLayout from '@/components/layout/MainLayout';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { Settings, Save, LayoutGrid, Grid3X3, Palette, HelpCircle } from 'lucide-react';
+import { Settings, Save, LayoutGrid, Grid3X3, Palette, HelpCircle, Info, CheckCircle, ArrowRight } from 'lucide-react';
 import CustomizableDashboard from '@/components/customize/CustomizableDashboard';
 import StyleSelector from '@/components/customize/StyleSelector';
 import PatternEditor from '@/components/customize/PatternEditor';
 import { useCustomize } from '@/contexts/CustomizeContext';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Progress } from "@/components/ui/progress";
 
 const CustomizePage = () => {
   const { saveLayout } = useCustomize();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [showOnboarding, setShowOnboarding] = useState(true);
+  const [onboardingStep, setOnboardingStep] = useState(0);
+  
+  // Check if this is the first time the user is visiting this page
+  useEffect(() => {
+    const hasVisited = localStorage.getItem('customizeVisited');
+    if (hasVisited) {
+      setShowOnboarding(false);
+    }
+  }, []);
 
   const handleSaveLayout = () => {
     saveLayout();
     toast({
       title: "Layout saved",
       description: "Your custom layout has been saved successfully.",
+      variant: "success",
     });
   };
+  
+  const completeOnboarding = () => {
+    localStorage.setItem('customizeVisited', 'true');
+    setShowOnboarding(false);
+  };
+  
+  const onboardingSteps = [
+    {
+      title: "Welcome to Customization",
+      description: "Personalize your control panel exactly the way you want it. Follow these quick steps to get started.",
+      icon: <Info className="h-12 w-12 text-blue-400" />,
+    },
+    {
+      title: "Dashboard Layout",
+      description: "Add, move, and resize widgets on your dashboard to create your perfect control panel layout.",
+      icon: <LayoutGrid className="h-12 w-12 text-green-400" />,
+    },
+    {
+      title: "Visual Styles",
+      description: "Choose control styles, colors, and themes that match your preferences or equipment type.",
+      icon: <Palette className="h-12 w-12 text-purple-400" />,
+    },
+    {
+      title: "Pattern Banks",
+      description: "Set up groups of controls that can be activated together with a single tap.",
+      icon: <Grid3X3 className="h-12 w-12 text-amber-400" />,
+    },
+  ];
+
+  if (showOnboarding) {
+    return (
+      <MainLayout>
+        <div className="max-w-2xl mx-auto mt-8">
+          <Card className="border-blue-500/30">
+            <CardHeader>
+              <CardTitle className="text-2xl flex items-center">
+                {onboardingSteps[onboardingStep].icon}
+                <span className="ml-4">{onboardingSteps[onboardingStep].title}</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-lg">{onboardingSteps[onboardingStep].description}</p>
+              
+              {onboardingStep === 0 && (
+                <div className="bg-gray-800/50 rounded-lg p-4 space-y-3">
+                  <p>Here's what you can customize:</p>
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-green-400 mt-0.5" />
+                    <p>Add, resize, and arrange control widgets on your dashboard</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-green-400 mt-0.5" />
+                    <p>Choose from different switch styles, colors, and themes</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <CheckCircle className="h-5 w-5 text-green-400 mt-0.5" />
+                    <p>Create pattern banks to group controls together</p>
+                  </div>
+                </div>
+              )}
+              
+              {onboardingStep === 3 && (
+                <Alert className="bg-green-900/20 border-green-500/30">
+                  <CheckCircle className="h-4 w-4 text-green-500" />
+                  <AlertDescription className="text-sm text-gray-300">
+                    All your customizations are automatically saved to your device. You can make changes anytime.
+                  </AlertDescription>
+                </Alert>
+              )}
+            </CardContent>
+            <CardFooter className="flex flex-col space-y-4">
+              <Progress value={((onboardingStep + 1) / onboardingSteps.length) * 100} className="w-full" />
+              <div className="flex justify-between w-full">
+                <Button 
+                  variant="outline" 
+                  onClick={() => onboardingStep > 0 ? setOnboardingStep(onboardingStep - 1) : completeOnboarding()}
+                >
+                  {onboardingStep > 0 ? "Back" : "Skip Tour"}
+                </Button>
+                <Button 
+                  onClick={() => onboardingStep < onboardingSteps.length - 1 ? setOnboardingStep(onboardingStep + 1) : completeOnboarding()}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
+                  {onboardingStep < onboardingSteps.length - 1 ? (
+                    <>Next <ArrowRight className="ml-2 h-4 w-4" /></>
+                  ) : "Get Started"}
+                </Button>
+              </div>
+            </CardFooter>
+          </Card>
+        </div>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
@@ -66,7 +173,7 @@ const CustomizePage = () => {
               <TabsList className="grid grid-cols-3 mb-4">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <TabsTrigger value="dashboard">
+                    <TabsTrigger value="dashboard" className="flex items-center">
                       <LayoutGrid className="mr-2 h-4 w-4" />
                       Dashboard Layout
                     </TabsTrigger>
@@ -78,7 +185,7 @@ const CustomizePage = () => {
                 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <TabsTrigger value="styles">
+                    <TabsTrigger value="styles" className="flex items-center">
                       <Palette className="mr-2 h-4 w-4" />
                       Styles & Themes
                     </TabsTrigger>
@@ -90,7 +197,7 @@ const CustomizePage = () => {
                 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <TabsTrigger value="patterns">
+                    <TabsTrigger value="patterns" className="flex items-center">
                       <Grid3X3 className="mr-2 h-4 w-4" />
                       Pattern Banks
                     </TabsTrigger>
